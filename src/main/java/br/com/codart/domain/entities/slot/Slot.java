@@ -11,17 +11,13 @@ public class Slot {
     private final UUID slotId;
     private final LocalTime startTime;
     private final LocalTime endTime;
-    private SlotStatus slotStatus;
+    private SlotStatus status;
 
-    private Slot(UUID slotId, LocalTime startTime, LocalTime endTime, SlotStatus slotStatus) {
-        if (endTime.isBefore(startTime)) {
-            throw new IllegalArgumentException("endTime não pode ser anterior a startTime");
-        }
-
+    private Slot(UUID slotId, LocalTime startTime, LocalTime endTime, SlotStatus status) {
         this.slotId = slotId;
         this.startTime = startTime;
         this.endTime = endTime;
-        this.slotStatus = slotStatus;
+        this.status = status;
         selfValidation();
     }
 
@@ -40,37 +36,37 @@ public class Slot {
     }
 
     public Slot block() {
-        if (this.slotStatus == SlotStatus.RESERVED || this.slotStatus == SlotStatus.CANCELLED || this.slotStatus == SlotStatus.RESCHEDULED) {
+        if (this.status == SlotStatus.RESERVED || this.status == SlotStatus.CANCELLED || this.status == SlotStatus.RESCHEDULED) {
             throw new IllegalStateException("Slot não pode ser bloqueado, pois está reservado, cancelado ou reagendado");
         }
 
-        this.slotStatus = SlotStatus.BLOCKED;
+        this.status = SlotStatus.BLOCKED;
 
         return this;
     }
 
     public Slot cancel() {
-        if (this.slotStatus == SlotStatus.BLOCKED || this.slotStatus == SlotStatus.AVAILABLE) {
+        if (this.status == SlotStatus.BLOCKED || this.status == SlotStatus.AVAILABLE) {
             throw new IllegalStateException("Slot não pode ser cancelado, pois está disponível ou bloqueado");
         }
 
-        this.slotStatus = SlotStatus.CANCELLED;
+        this.status = SlotStatus.CANCELLED;
 
         return this;
     }
 
     public Slot reserve() {
-        if (this.slotStatus != SlotStatus.AVAILABLE) {
+        if (this.status != SlotStatus.AVAILABLE) {
             throw new IllegalStateException("Slot não disponível para reserva");
         }
 
-        this.slotStatus = SlotStatus.RESERVED;
+        this.status = SlotStatus.RESERVED;
 
         return this;
     }
 
     public Slot reschedule(LocalTime newStartTime, long durationMinutes) {
-        if (this.slotStatus != SlotStatus.RESERVED) {
+        if (this.status != SlotStatus.RESERVED) {
             throw new IllegalStateException("Somente slots reservados podem ser reagendados");
         }
 
@@ -84,16 +80,20 @@ public class Slot {
     }
 
     public Slot reopen() {
-        if (this.slotStatus != SlotStatus.CANCELLED && this.slotStatus != SlotStatus.BLOCKED) {
+        if (this.status != SlotStatus.CANCELLED && this.status != SlotStatus.BLOCKED) {
             throw new IllegalStateException("Somente slots cancelados ou bloqueados podem ser reabertos");
         }
 
-        this.slotStatus = SlotStatus.AVAILABLE;
+        this.status = SlotStatus.AVAILABLE;
 
         return this;
     }
 
     private void selfValidation() {
+        if (endTime.isBefore(startTime)) {
+            throw new IllegalArgumentException("endTime não pode ser anterior a startTime");
+        }
+
         if (slotId == null) {
             throw new IllegalArgumentException("slotId não pode ser nulo");
         }
@@ -106,8 +106,12 @@ public class Slot {
             throw new IllegalArgumentException("startTime não pode ser igual a endTime");
         }
 
-        if (slotStatus == null) {
+        if (status == null) {
             throw new IllegalArgumentException("slotStatus não pode ser nulo");
         }
+    }
+
+    public boolean isAvailable() {
+        return this.status == SlotStatus.AVAILABLE;
     }
 }
