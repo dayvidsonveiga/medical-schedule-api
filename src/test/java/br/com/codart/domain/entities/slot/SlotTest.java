@@ -19,7 +19,7 @@ class SlotTest {
     @Test
     void testCreateSlot() {
         assertNotNull(slot);
-        assertEquals(SlotStatus.AVAILABLE, slot.getStatus());
+        assertEquals(SlotStatus.AVAILABLE, slot.getState());
         assertEquals(LocalTime.of(10, 0), slot.getStartTime());
         assertEquals(LocalTime.of(11, 0), slot.getEndTime());
     }
@@ -35,7 +35,7 @@ class SlotTest {
     @Test
     void testBlockSlot() {
         slot.block();
-        assertEquals(SlotStatus.BLOCKED, slot.getStatus());
+        assertEquals(SlotStatus.BLOCKED, slot.getState());
     }
 
     @Test
@@ -51,7 +51,7 @@ class SlotTest {
     void testCancelSlot() {
         slot.reserve();
         slot.cancel();
-        assertEquals(SlotStatus.CANCELLED, slot.getStatus());
+        assertEquals(SlotStatus.CANCELLED, slot.getState());
     }
 
     @Test
@@ -65,7 +65,7 @@ class SlotTest {
     @Test
     void testReserveAvailableSlot() {
         slot.reserve();
-        assertEquals(SlotStatus.RESERVED, slot.getStatus());
+        assertEquals(SlotStatus.RESERVED, slot.getState());
     }
 
     @Test
@@ -85,7 +85,7 @@ class SlotTest {
 
         assertNotNull(rescheduledSlot);
         assertEquals(newStartTime, rescheduledSlot.getStartTime());
-        assertEquals(SlotStatus.RESCHEDULED, rescheduledSlot.getStatus());
+        assertEquals(SlotStatus.RESCHEDULED, rescheduledSlot.getState());
     }
 
 
@@ -103,7 +103,7 @@ class SlotTest {
         slot.cancel();
         slot.reopen();
 
-        assertEquals(SlotStatus.AVAILABLE, slot.getStatus());
+        assertEquals(SlotStatus.AVAILABLE, slot.getState());
     }
 
     @Test

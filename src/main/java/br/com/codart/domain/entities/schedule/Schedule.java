@@ -40,13 +40,10 @@ public class Schedule {
     }
 
     public void addSlot(Slot slot) {
-        validateSlotConflicts(slot);
-
-        if (slot.getStatus() != SlotStatus.AVAILABLE) {
-            throw new IllegalStateException("Somente slots disponíveis podem ser adicionados à agenda");
-        }
+        validateNoOverlap(null, slot.getStartTime(), slot.getEndTime());
 
         this.slots.add(slot);
+
         calculateStatus();
     }
 
@@ -64,8 +61,8 @@ public class Schedule {
 
     public void rescheduleSlot(Slot slot, LocalTime newDate, long durationMinutes) {
         findSlot(slot.getSlotId());
-        Slot newSlot = slot.reschedule(newDate, durationMinutes);
-        this.slots.remove(slot);
+        slot.reschedule();
+        Slot newSlot = Slot.create(newDate, durationMinutes);
         this.slots.add(newSlot);
         calculateStatus();
     }
@@ -77,10 +74,6 @@ public class Schedule {
 
         if (id == null) {
             throw new IllegalArgumentException("id não pode ser nulo");
-        }
-
-        if (scheduleDate == null) {
-            throw new IllegalArgumentException("scheduleDate não pode ser nulo");
         }
 
         validateSlotConflicts();
@@ -115,10 +108,6 @@ public class Schedule {
         }
     }
 
-    private boolean isOverlapping(Slot slot, LocalTime startTime, LocalTime endTime) {
-        return !(slot.getEndTime().isBefore(startTime) || slot.getStartTime().isAfter(endTime));
-    }
-
     private void validateNoOverlap(UUID excludedSlotId, LocalTime startTime, LocalTime endTime) {
         for (Slot existingSlot : this.slots) {
             if (existingSlot.getSlotId().equals(excludedSlotId)) {
@@ -128,6 +117,10 @@ public class Schedule {
                 throw new IllegalArgumentException("O horário fornecido se sobrepõe a outro horário existente na agenda.");
             }
         }
+    }
+
+    private boolean isOverlapping(Slot slot, LocalTime startTime, LocalTime endTime) {
+        return !(slot.getEndTime().isBefore(startTime) || slot.getStartTime().isAfter(endTime));
     }
 
     private void calculateStatus() {
