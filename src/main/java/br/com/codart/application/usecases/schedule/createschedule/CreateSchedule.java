@@ -1,8 +1,8 @@
 package br.com.codart.application.usecases.schedule.createschedule;
 
-import br.com.codart.domain.entities.repository.DomainScheduleRepository;
-import br.com.codart.domain.entities.schedule.Schedule;
-import br.com.codart.domain.entities.slot.Slot;
+import br.com.codart.domain.entity.schedule.Schedule;
+import br.com.codart.domain.entity.slot.Slot;
+import br.com.codart.domain.repository.DomainScheduleRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -11,11 +11,11 @@ import java.util.List;
 
 @Service
 @AllArgsConstructor
-public class CreateSchedule implements ICreateSchedule{
+public class CreateSchedule implements CreateScheduleUseCase{
 
     private final DomainScheduleRepository domainScheduleRepository;
 
-    public CreateScheduleResponseDTO process(CreateScheduleRequestDTO request) {
+    public CreateScheduleResponseDTO execute(CreateScheduleRequestDTO request) {
         List<Slot> slots = new ArrayList<>();
 
         if (!request.getSlots().isEmpty()) {

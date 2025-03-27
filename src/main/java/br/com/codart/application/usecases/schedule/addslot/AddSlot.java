@@ -1,18 +1,18 @@
 package br.com.codart.application.usecases.schedule.addslot;
 
-import br.com.codart.domain.entities.repository.DomainScheduleRepository;
-import br.com.codart.domain.entities.schedule.Schedule;
-import br.com.codart.domain.entities.slot.Slot;
+import br.com.codart.domain.repository.DomainScheduleRepository;
+import br.com.codart.domain.entity.schedule.Schedule;
+import br.com.codart.domain.entity.slot.Slot;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 @Service
 @AllArgsConstructor
-public class AddSlot {
+public class AddSlot implements AddSlotUseCase{
 
     private final DomainScheduleRepository domainScheduleRepository;
 
-    public AddSlotResponseDTO process(AddSlotRequestDTO request) {
+    public AddSlotResponseDTO execute(AddSlotRequestDTO request) {
         Slot slot = Slot.create(request.getStartTime(), request.getDuration());
 
         Schedule schedule = domainScheduleRepository.findById(request.getScheduleId()).orElseThrow();
@@ -21,6 +21,6 @@ public class AddSlot {
 
         domainScheduleRepository.save(schedule);
 
-        return new AddSlotResponseDTO(slot.getSlotId());
+        return new AddSlotResponseDTO(slot.getId());
     }
 }

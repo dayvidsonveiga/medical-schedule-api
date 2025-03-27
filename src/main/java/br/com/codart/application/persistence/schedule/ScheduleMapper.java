@@ -2,7 +2,7 @@ package br.com.codart.application.persistence.schedule;
 
 import br.com.codart.application.persistence.slot.SlotMapper;
 
-import br.com.codart.domain.entities.schedule.Schedule;
+import br.com.codart.domain.entity.schedule.Schedule;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 

@@ -1,0 +1,22 @@
+package br.com.codart.application.usecases.schedule.cancelslot;
+
+import io.swagger.v3.oas.annotations.Hidden;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+
+import java.util.UUID;
+
+@Getter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+public class CancelSlotRequestDTO {
+
+    @Hidden
+    private UUID scheduleId;
+
+    @Hidden
+    private UUID slotId;
+}

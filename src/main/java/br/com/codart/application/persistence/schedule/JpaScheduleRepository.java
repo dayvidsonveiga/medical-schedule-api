@@ -1,8 +1,9 @@
 package br.com.codart.application.persistence.schedule;
 
 
-import br.com.codart.domain.entities.repository.DomainScheduleRepository;
-import br.com.codart.domain.entities.schedule.Schedule;
+import br.com.codart.domain.repository.DomainScheduleRepository;
+import br.com.codart.domain.entity.schedule.Schedule;
+import br.com.codart.domain.entity.slot.SlotStatus;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
@@ -27,5 +28,22 @@ public class JpaScheduleRepository implements DomainScheduleRepository {
     @Override
     public Optional<Schedule> findById(UUID scheduleId) {
         return scheduleRepository.findScheduleWithSlots(scheduleId).map(scheduleMapper::toDomain);
+    }
+
+    @Override
+    public boolean haveTimeAvailability(UUID scheduleId) {
+        return scheduleRepository.existsAvailableSlotByScheduleId(scheduleId);
+    }
+
+    @Override
+    public Optional<Schedule> getScheduleWithSlotStatusEqual(UUID id, String slotStatus) {
+        return scheduleRepository
+                .findScheduleWithSlotsByStatus(id, SlotStatus.valueOf(slotStatus))
+                .map(scheduleMapper::toDomain);
+    }
+
+    @Override
+    public boolean isScheduleDateTaken(LocalDate date) {
+        return scheduleRepository.existsByDate(date);
     }
 }

@@ -1,7 +1,7 @@
 package br.com.codart.application.persistence.slot;
 
 
-import br.com.codart.domain.entities.slot.Slot;
+import br.com.codart.domain.entity.slot.Slot;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -13,7 +13,7 @@ public class SlotMapper {
         }
 
         SlotEntity entity = new SlotEntity();
-        entity.setId(domain.getSlotId());
+        entity.setId(domain.getId());
         entity.setStartTime(domain.getStartTime());
         entity.setEndTime(domain.getEndTime());
         entity.setStatus(domain.getState().getStatus());

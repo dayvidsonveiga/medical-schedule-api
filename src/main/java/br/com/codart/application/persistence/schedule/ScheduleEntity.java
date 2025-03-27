@@ -2,7 +2,7 @@ package br.com.codart.application.persistence.schedule;
 
 
 import br.com.codart.application.persistence.slot.SlotEntity;
-import br.com.codart.domain.entities.schedule.ScheduleStatus;
+import br.com.codart.domain.entity.schedule.ScheduleStatus;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
