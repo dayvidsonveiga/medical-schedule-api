@@ -52,8 +52,7 @@ public class ScheduleController implements ScheduleAPI {
 
     @Override
     @GetMapping("/{id}/available-slots")
-    public ResponseEntity<List<GetAvailableSlotsResponseDTO>> getAvailableSlots(
-            @PathVariable("id") UUID id) {
+    public ResponseEntity<List<GetAvailableSlotsResponseDTO>> getAvailableSlots(@PathVariable("id") UUID id) {
         return ResponseEntity.ok(getAvailableSlotsUseCase.execute(id));
     }
 

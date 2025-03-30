@@ -33,7 +33,11 @@ public class ScheduleMapper {
             return null;
         }
 
-//        return Schedule.recreate(entity.getId(), entity.getScheduleDate(), mapTo(entity.getSlots(), slotMapper::toDomain));
-        return null;
+        return Schedule.recreate(
+                entity.getId(),
+                entity.getScheduleDate(),
+                entity.getStatus(),
+                entity.getSlots().stream().map(slotMapper::toDomain).toList()
+        );
     }
 }

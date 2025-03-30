@@ -39,6 +39,10 @@ public class Schedule {
         return new Schedule(UUID.randomUUID(), scheduleDate, ScheduleStatus.AVAILABLE, availableSlots);
     }
 
+    public static Schedule recreate(UUID id, LocalDate scheduleDate, ScheduleStatus status, List<Slot> slots) {
+        return new Schedule(id, scheduleDate, status, slots);
+    }
+
     public void addSlot(Slot slot) {
         validateNoOverlap(null, slot.getStartTime(), slot.getEndTime());
 

@@ -21,7 +21,7 @@ public class CreateScheduleRequestDTO {
     @Data
     @NoArgsConstructor
     @AllArgsConstructor
-    public class CreateSlotRequestDTO {
+    public static class CreateSlotRequestDTO {
 
         @JsonFormat(pattern = "HH:mm")
         @Schema(example = "08:00")
